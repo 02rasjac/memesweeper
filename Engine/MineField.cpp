@@ -22,7 +22,7 @@ void MineField::Tile::Draw(Vei2& gridPos, Graphics& gfx)
 			SpriteCodex::DrawTileBomb(screenPos, gfx);
 		}
 		else {
-			SpriteCodex::DrawTile0(screenPos, gfx);
+			SpriteCodex::DrawTileN(nNeighborsBombs, screenPos, gfx);
 		}
 		break;
 	case State::flagged:
@@ -52,6 +52,23 @@ void MineField::Tile::ToggleFlag()
 	}
 }
 
+void MineField::Tile::CalculateNeighbors(const Vei2& gridPos, const Tile tiles[])
+{
+	const int xStart = std::max(0, gridPos.x - 1);
+	const int yStart = std::max(0, gridPos.y - 1);
+	const int xEnd = std::min(width - 1, gridPos.x + 1);
+	const int yEnd = std::min(height - 1, gridPos.y + 1);
+
+	nNeighborsBombs = 0;
+	for (Vei2 p = {xStart, yStart}; p.y <= yEnd; p.y++, p.x = xStart) {
+		for (; p.x <= xEnd; p.x++) {
+			if (tiles[p.y * width + p.x].HasBomb()) {
+				nNeighborsBombs++;
+			}
+		}
+	}
+}
+
 MineField::MineField(int nBombs)
 {
 	std::random_device rd;
@@ -69,8 +86,14 @@ MineField::MineField(int nBombs)
 		tile->SpawnBomb();
 	}
 
+	for (Vei2 gridPos = { 0,0 }; gridPos.y < height; gridPos.y++, gridPos.x = 0) {
+		for (; gridPos.x < width; gridPos.x++) {
+			tiles[gridPos.y * width + gridPos.x].CalculateNeighbors(gridPos, tiles);
+		}
+	}
+
 	// TEST CODE
-	/*
+	
 	for (int nRevealed = 0; nRevealed < 100; nRevealed++) {
 		Tile* tile;
 		do {
@@ -79,7 +102,7 @@ MineField::MineField(int nBombs)
 		} while (tile->GetState() == Tile::State::reveald);
 		tile->Reveal();
 	}
-	*/
+	
 }
 
 void MineField::Draw(Graphics& gfx)

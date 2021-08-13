@@ -10,6 +10,7 @@ public:
 	static constexpr int tileSize = 16;
 	// base color for all tiles
 	static constexpr Color baseColor = { 192,192,192 };
+	static void DrawTileN(const int number, const Vei2& pos, Graphics& gfx);
 	// 16x16 tile sprites assume (192,192,192) background and top left origin
 	static void DrawTile0( const Vei2& pos,Graphics& gfx );
 	static void DrawTile1( const Vei2& pos,Graphics& gfx );

@@ -21,9 +21,11 @@ private:
 		void Reveal();
 		void ToggleFlag();
 		const State GetState() const { return state; };
+		void CalculateNeighbors(const Vei2& gridPos, const Tile tiles[]);
 	private:
 		State state = State::hidden;
 		bool isBomb = false;
+		short nNeighborsBombs = -1;
 	};
 public:
 	MineField(int nBombs);
