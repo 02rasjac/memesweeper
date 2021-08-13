@@ -46,6 +46,9 @@ void Game::UpdateModel()
 		{
 			mf.ProcessLMB(e.GetPos());
 		}
+		else if (e.GetType() == Mouse::Event::Type::RPress) {
+			mf.ProcessRMB(e.GetPos());
+		}
 	}
 }
 

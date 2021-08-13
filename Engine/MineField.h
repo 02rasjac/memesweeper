@@ -19,6 +19,7 @@ private:
 		bool HasBomb() const { return isBomb; };
 		void Draw(Vei2& gridPos, Graphics& gfx);
 		void Reveal();
+		void ToggleFlag();
 		const State GetState() const { return state; };
 	private:
 		State state = State::hidden;
@@ -28,6 +29,7 @@ public:
 	MineField(int nBombs);
 	void Draw(Graphics& gfx);
 	void ProcessLMB(const Vei2& screenPos);
+	void ProcessRMB(const Vei2& screenPos);
 private:
 	static constexpr int width = 20;
 	static constexpr int height = 16;

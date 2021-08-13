@@ -26,7 +26,7 @@ void MineField::Tile::Draw(Vei2& gridPos, Graphics& gfx)
 		}
 		break;
 	case State::flagged:
-		SpriteCodex::DrawTile0(screenPos, gfx);
+		SpriteCodex::DrawTileButton(screenPos, gfx);
 		SpriteCodex::DrawTileFlag(screenPos, gfx);
 		break;
 	default:
@@ -38,6 +38,18 @@ void MineField::Tile::Reveal()
 {
 	assert(state == State::hidden);
 	state = State::reveald;
+}
+
+void MineField::Tile::ToggleFlag()
+{
+	assert(state != State::reveald);
+
+	if (state == State::flagged) {
+		state = State::hidden;
+	}
+	else if (state == State::hidden) {
+		state = State::flagged;
+	}
 }
 
 MineField::MineField(int nBombs)
@@ -88,4 +100,14 @@ void MineField::ProcessLMB(const Vei2& screenPos)
 
 	Tile& clickedTile = tiles[gridPos.y * width + gridPos.x];
 	clickedTile.Reveal();
+}
+
+void MineField::ProcessRMB(const Vei2& screenPos)
+{
+	const Vei2 gridPos = screenPos / SpriteCodex::tileSize;
+	assert(gridPos.x >= 0 && gridPos.x <= width);
+	assert(gridPos.y >= 0 && gridPos.y <= height);
+
+	Tile& clickedTile = tiles[gridPos.y * width + gridPos.x];
+	clickedTile.ToggleFlag();
 }
