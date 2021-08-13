@@ -32,6 +32,7 @@ public:
 	void Draw(Graphics& gfx);
 	void ProcessLMB(const Vei2& screenPos);
 	void ProcessRMB(const Vei2& screenPos);
+	Tile& TileAt(const Vei2& gridPos);
 private:
 	static constexpr int width = 20;
 	static constexpr int height = 16;

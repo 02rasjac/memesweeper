@@ -77,18 +77,18 @@ MineField::MineField(int nBombs)
 	std::uniform_int_distribution<int> yDist(0, height - 1);
 
 	for (; nBombs > 0; nBombs--) {
-		Vei2 tilePos;
+		Vei2 gridPos;
 		Tile* tile;
 		do {
-			tilePos = { xDist(rnd), yDist(rnd) };
-			tile = &tiles[tilePos.y * width + tilePos.x];
+			gridPos = { xDist(rnd), yDist(rnd) };
+			tile = &TileAt(gridPos);
 		} while (tile->HasBomb());
 		tile->SpawnBomb();
 	}
 
 	for (Vei2 gridPos = { 0,0 }; gridPos.y < height; gridPos.y++, gridPos.x = 0) {
 		for (; gridPos.x < width; gridPos.x++) {
-			tiles[gridPos.y * width + gridPos.x].CalculateNeighbors(gridPos, tiles);
+			TileAt(gridPos).CalculateNeighbors(gridPos, tiles);
 		}
 	}
 
@@ -97,8 +97,8 @@ MineField::MineField(int nBombs)
 	for (int nRevealed = 0; nRevealed < 100; nRevealed++) {
 		Tile* tile;
 		do {
-			Vei2 tilePos = { xDist(rnd), yDist(rnd) };
-			tile = &tiles[tilePos.y * width + tilePos.x];
+			Vei2 gridPos = { xDist(rnd), yDist(rnd) };
+			tile = &TileAt(gridPos);
 		} while (tile->GetState() == Tile::State::reveald);
 		tile->Reveal();
 	}
@@ -110,7 +110,7 @@ void MineField::Draw(Graphics& gfx)
 	gfx.DrawRect(background, Color(192, 192, 192));
 	for (Vei2 gridPos = { 0,0 }; gridPos.y < height; gridPos.y++, gridPos.x = 0) {
 		for (; gridPos.x < width; gridPos.x++) {
-			tiles[gridPos.y * width + gridPos.x].Draw(gridPos, gfx);
+			TileAt(gridPos).Draw(gridPos, gfx);
 		}
 	}
 }
@@ -121,7 +121,7 @@ void MineField::ProcessLMB(const Vei2& screenPos)
 	assert(gridPos.x >= 0 && gridPos.x <= width);
 	assert(gridPos.y >= 0 && gridPos.y <= height);
 
-	Tile& clickedTile = tiles[gridPos.y * width + gridPos.x];
+	Tile& clickedTile = TileAt(gridPos);
 	clickedTile.Reveal();
 }
 
@@ -131,6 +131,11 @@ void MineField::ProcessRMB(const Vei2& screenPos)
 	assert(gridPos.x >= 0 && gridPos.x <= width);
 	assert(gridPos.y >= 0 && gridPos.y <= height);
 
-	Tile& clickedTile = tiles[gridPos.y * width + gridPos.x];
+	Tile& clickedTile = TileAt(gridPos);
 	clickedTile.ToggleFlag();
+}
+
+MineField::Tile& MineField::TileAt(const Vei2& gridPos)
+{
+	return tiles[gridPos.y * width + gridPos.x];
 }
