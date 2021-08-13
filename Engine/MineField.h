@@ -27,6 +27,7 @@ private:
 public:
 	MineField(int nBombs);
 	void Draw(Graphics& gfx);
+	void ProcessLMB(const Vei2& screenPos);
 private:
 	static constexpr int width = 20;
 	static constexpr int height = 16;

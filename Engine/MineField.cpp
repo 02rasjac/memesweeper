@@ -79,3 +79,13 @@ void MineField::Draw(Graphics& gfx)
 		}
 	}
 }
+
+void MineField::ProcessLMB(const Vei2& screenPos)
+{
+	const Vei2 gridPos = screenPos / SpriteCodex::tileSize;
+	assert(gridPos.x >= 0 && gridPos.x <= width);
+	assert(gridPos.y >= 0 && gridPos.y <= height);
+
+	Tile& clickedTile = tiles[gridPos.y * width + gridPos.x];
+	clickedTile.Reveal();
+}
