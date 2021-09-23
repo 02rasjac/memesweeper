@@ -39,15 +39,16 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
+	if (gameOver) { return; }
 	while (!wnd.mouse.IsEmpty())
 	{
 		const Mouse::Event e = wnd.mouse.Read();
 		if (e.GetType() == Mouse::Event::Type::LPress)
 		{
-			mf.ProcessLMB(e.GetPos());
+			gameOver = mf.ProcessRevealClick(e.GetPos());
 		}
 		else if (e.GetType() == Mouse::Event::Type::RPress) {
-			mf.ProcessRMB(e.GetPos());
+			mf.ProcessFlagClick(e.GetPos());
 		}
 	}
 }

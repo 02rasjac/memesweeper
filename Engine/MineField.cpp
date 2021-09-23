@@ -36,7 +36,6 @@ void MineField::Tile::Draw(Vei2& gridPos, Graphics& gfx)
 
 void MineField::Tile::Reveal()
 {
-	assert(state == State::hidden);
 	state = State::reveald;
 }
 
@@ -115,7 +114,10 @@ void MineField::Draw(Graphics& gfx)
 	}
 }
 
-void MineField::ProcessLMB(const Vei2& screenPos)
+/**
+  * Returns: If the tile has a bomb or not
+  */
+bool MineField::ProcessRevealClick(const Vei2& screenPos)
 {
 	const Vei2 gridPos = screenPos / SpriteCodex::tileSize;
 	assert(gridPos.x >= 0 && gridPos.x <= width);
@@ -123,9 +125,11 @@ void MineField::ProcessLMB(const Vei2& screenPos)
 
 	Tile& clickedTile = TileAt(gridPos);
 	clickedTile.Reveal();
+
+	return clickedTile.HasBomb();
 }
 
-void MineField::ProcessRMB(const Vei2& screenPos)
+void MineField::ProcessFlagClick(const Vei2& screenPos)
 {
 	const Vei2 gridPos = screenPos / SpriteCodex::tileSize;
 	assert(gridPos.x >= 0 && gridPos.x <= width);

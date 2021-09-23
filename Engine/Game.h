@@ -45,5 +45,6 @@ private:
 	/********************************/
 	/*  User Variables              */
 	MineField mf;
+	bool gameOver = false;
 	/********************************/
 };

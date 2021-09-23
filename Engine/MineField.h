@@ -30,8 +30,8 @@ private:
 public:
 	MineField(int nBombs);
 	void Draw(Graphics& gfx);
-	void ProcessLMB(const Vei2& screenPos);
-	void ProcessRMB(const Vei2& screenPos);
+	bool ProcessRevealClick(const Vei2& screenPos);
+	void ProcessFlagClick(const Vei2& screenPos);
 	Tile& TileAt(const Vei2& gridPos);
 private:
 	static constexpr int width = 20;
