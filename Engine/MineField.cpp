@@ -9,10 +9,12 @@ void MineField::Tile::SpawnBomb()
 	isBomb = true;
 }
 
-void MineField::Tile::Draw(Vei2& gridPos, Graphics& gfx)
+void MineField::Tile::Draw(Vei2& gridPos, const bool gameOver, Graphics& gfx)
 {
+	State tempState = state;
 	Vei2& screenPos = gridPos * SpriteCodex::tileSize;
-	switch (state)
+
+	switch (tempState)
 	{
 	case State::hidden:
 		SpriteCodex::DrawTileButton(screenPos, gfx);
@@ -26,7 +28,12 @@ void MineField::Tile::Draw(Vei2& gridPos, Graphics& gfx)
 		}
 		break;
 	case State::flagged:
-		SpriteCodex::DrawTileButton(screenPos, gfx);
+		if (gameOver && isBomb) {
+			SpriteCodex::DrawTileBomb(screenPos, gfx);
+		}
+		else {
+			SpriteCodex::DrawTileButton(screenPos, gfx);
+		}
 		SpriteCodex::DrawTileFlag(screenPos, gfx);
 		break;
 	default:
@@ -104,12 +111,12 @@ MineField::MineField(int nBombs)
 	
 }
 
-void MineField::Draw(Graphics& gfx)
+void MineField::Draw(const bool gameOver, Graphics& gfx)
 {
 	gfx.DrawRect(background, Color(192, 192, 192));
 	for (Vei2 gridPos = { 0,0 }; gridPos.y < height; gridPos.y++, gridPos.x = 0) {
 		for (; gridPos.x < width; gridPos.x++) {
-			TileAt(gridPos).Draw(gridPos, gfx);
+			TileAt(gridPos).Draw(gridPos, gameOver, gfx);
 		}
 	}
 }
@@ -137,16 +144,6 @@ void MineField::ProcessFlagClick(const Vei2& screenPos)
 
 	Tile& clickedTile = TileAt(gridPos);
 	clickedTile.ToggleFlag();
-}
-
-void MineField::RevealAllBombs()
-{
-	for (Tile& tile : tiles)
-	{
-		if (tile.HasBomb()) {
-			tile.Reveal();
-		}
-	}
 }
 
 MineField::Tile& MineField::TileAt(const Vei2& gridPos)

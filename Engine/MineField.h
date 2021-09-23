@@ -17,7 +17,7 @@ private:
 	public:
 		void SpawnBomb();
 		bool HasBomb() const { return isBomb; };
-		void Draw(Vei2& gridPos, Graphics& gfx);
+		void Draw(Vei2& gridPos, const bool gameOver, Graphics& gfx);
 		void Reveal();
 		void ToggleFlag();
 		const State GetState() const { return state; };
@@ -29,10 +29,9 @@ private:
 	};
 public:
 	MineField(int nBombs);
-	void Draw(Graphics& gfx);
+	void Draw(const bool gameOver, Graphics& gfx);
 	bool ProcessRevealClick(const Vei2& screenPos);
 	void ProcessFlagClick(const Vei2& screenPos);
-	void RevealAllBombs();
 	Tile& TileAt(const Vei2& gridPos);
 private:
 	static constexpr int width = 20;

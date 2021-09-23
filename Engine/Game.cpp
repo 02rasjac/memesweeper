@@ -40,7 +40,6 @@ void Game::Go()
 void Game::UpdateModel()
 {
 	if (gameOver) { 
-		mf.RevealAllBombs();
 		return;
 	}
 
@@ -59,5 +58,5 @@ void Game::UpdateModel()
 
 void Game::ComposeFrame()
 {
-	mf.Draw(gfx);
+	mf.Draw(gameOver, gfx);
 }
