@@ -39,7 +39,11 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
-	if (gameOver) { return; }
+	if (gameOver) { 
+		mf.RevealAllBombs();
+		return;
+	}
+
 	while (!wnd.mouse.IsEmpty())
 	{
 		const Mouse::Event e = wnd.mouse.Read();

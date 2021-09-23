@@ -32,6 +32,7 @@ public:
 	void Draw(Graphics& gfx);
 	bool ProcessRevealClick(const Vei2& screenPos);
 	void ProcessFlagClick(const Vei2& screenPos);
+	void RevealAllBombs();
 	Tile& TileAt(const Vei2& gridPos);
 private:
 	static constexpr int width = 20;

@@ -139,6 +139,16 @@ void MineField::ProcessFlagClick(const Vei2& screenPos)
 	clickedTile.ToggleFlag();
 }
 
+void MineField::RevealAllBombs()
+{
+	for (Tile& tile : tiles)
+	{
+		if (tile.HasBomb()) {
+			tile.Reveal();
+		}
+	}
+}
+
 MineField::Tile& MineField::TileAt(const Vei2& gridPos)
 {
 	return tiles[gridPos.y * width + gridPos.x];
