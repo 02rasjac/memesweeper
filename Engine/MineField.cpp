@@ -28,12 +28,20 @@ void MineField::Tile::Draw(Vei2& gridPos, const bool gameOver, Graphics& gfx)
 		}
 		break;
 	case State::flagged:
-		if (gameOver && isBomb) {
-			SpriteCodex::DrawTileBomb(screenPos, gfx);
+		if (gameOver) {
+			if (isBomb) { // Draw flag over bomb (correct flag)
+				SpriteCodex::DrawTileBomb(screenPos, gfx);
+				SpriteCodex::DrawTileFlag(screenPos, gfx);
+			}
+			else { // Draw cross over flag (incorrect flagg)
+				SpriteCodex::DrawTileButton(screenPos, gfx);
+				SpriteCodex::DrawTileFlag(screenPos, gfx);
+				SpriteCodex::DrawTileCross(screenPos, gfx);
+			}
+			break;
 		}
-		else {
-			SpriteCodex::DrawTileButton(screenPos, gfx);
-		}
+		// Draw flag over button
+		SpriteCodex::DrawTileButton(screenPos, gfx);
 		SpriteCodex::DrawTileFlag(screenPos, gfx);
 		break;
 	default:
