@@ -25,7 +25,7 @@ Game::Game(MainWindow& wnd)
 	:
 	wnd(wnd),
 	gfx(wnd),
-	mf(20)
+	mf(3)
 {
 }
 
@@ -39,7 +39,7 @@ void Game::Go()
 
 void Game::UpdateModel()
 {
-	if (gameOver) { 
+	if (gameStatus != GameStatus::playing) { 
 		return;
 	}
 
@@ -48,15 +48,23 @@ void Game::UpdateModel()
 		const Mouse::Event e = wnd.mouse.Read();
 		if (e.GetType() == Mouse::Event::Type::LPress)
 		{
-			gameOver = mf.ProcessRevealClick(e.GetPos());
+			gameStatus = mf.ProcessRevealClick(e.GetPos()) ? GameStatus::lost : GameStatus::playing;
 		}
 		else if (e.GetType() == Mouse::Event::Type::RPress) {
 			mf.ProcessFlagClick(e.GetPos());
 		}
 	}
+
+	if (mf.CheckWin()) {
+		gameStatus = GameStatus::won;
+	}
 }
 
 void Game::ComposeFrame()
 {
+	const bool gameOver = gameStatus != GameStatus::playing;
 	mf.Draw(gameOver, gfx);
+	if (gameStatus == GameStatus::won) {
+		SpriteCodex::DrawWin(Vei2(Graphics::ScreenWidth / 2, Graphics::ScreenHeight / 2), gfx);
+	}
 }

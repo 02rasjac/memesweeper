@@ -103,7 +103,7 @@ void MineField::Tile::CalculateNeighbors(const Vei2& gridPos, const Tile tiles[]
 	}
 }
 
-MineField::MineField(int nBombs)
+MineField::MineField(int nBombs) : nBombs(nBombs)
 {
 	std::random_device rd;
 	std::mt19937 rnd(rd());
@@ -172,6 +172,26 @@ void MineField::ProcessFlagClick(const Vei2& screenPos)
 
 	Tile& clickedTile = TileAt(gridPos);
 	clickedTile.ToggleFlag();
+
+	if (clickedTile.HasBomb()) {
+		if (clickedTile.GetState() == Tile::State::flagged) {
+			nCorrectFlags++;
+			return;
+		}
+		nCorrectFlags--;
+	}
+	else {
+		if (clickedTile.GetState() != Tile::State::flagged) {
+			nCorrectFlags++;
+			return;
+		}
+		nCorrectFlags--;
+	}
+}
+
+bool MineField::CheckWin()
+{
+	return nCorrectFlags == nBombs;
 }
 
 const Vei2& MineField::GetGridPos(const Vei2& screenPos)

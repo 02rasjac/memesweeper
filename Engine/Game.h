@@ -44,7 +44,13 @@ private:
 	Graphics gfx;
 	/********************************/
 	/*  User Variables              */
+	enum class GameStatus
+	{
+		playing,
+		won,
+		lost
+	};
 	MineField mf;
-	bool gameOver = false;
+	GameStatus gameStatus = GameStatus::playing;
 	/********************************/
 };
