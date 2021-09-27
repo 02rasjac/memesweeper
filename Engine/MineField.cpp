@@ -12,7 +12,7 @@ void MineField::Tile::SpawnBomb()
 void MineField::Tile::Draw(Vei2& gridPos, const bool gameOver, Graphics& gfx)
 {
 	State tempState = state;
-	Vei2& screenPos = gridPos * SpriteCodex::tileSize;
+	Vei2 screenPos = MineField::GetTopLeft() + gridPos * SpriteCodex::tileSize;
 
 	switch (tempState)
 	{
@@ -154,7 +154,7 @@ void MineField::Draw(const bool gameOver, Graphics& gfx)
   */
 bool MineField::ProcessRevealClick(const Vei2& screenPos)
 {
-	const Vei2 gridPos = screenPos / SpriteCodex::tileSize;
+	const Vei2 gridPos = GetGridPos(screenPos);
 	assert(gridPos.x >= 0 && gridPos.x <= width);
 	assert(gridPos.y >= 0 && gridPos.y <= height);
 
@@ -166,7 +166,7 @@ bool MineField::ProcessRevealClick(const Vei2& screenPos)
 
 void MineField::ProcessFlagClick(const Vei2& screenPos)
 {
-	const Vei2 gridPos = screenPos / SpriteCodex::tileSize;
+	const Vei2 gridPos = GetGridPos(screenPos);
 	assert(gridPos.x >= 0 && gridPos.x <= width);
 	assert(gridPos.y >= 0 && gridPos.y <= height);
 
@@ -174,7 +174,17 @@ void MineField::ProcessFlagClick(const Vei2& screenPos)
 	clickedTile.ToggleFlag();
 }
 
+const Vei2& MineField::GetGridPos(const Vei2& screenPos)
+{
+	return (screenPos - Vei2(left, top)) / SpriteCodex::tileSize;
+}
+
 MineField::Tile& MineField::TileAt(const Vei2& gridPos)
 {
 	return tiles[gridPos.y * width + gridPos.x];
+}
+
+const Vei2 MineField::GetTopLeft()
+{
+	return Vei2(left, top);
 }

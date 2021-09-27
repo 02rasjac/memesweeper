@@ -32,10 +32,14 @@ public:
 	void Draw(const bool gameOver, Graphics& gfx);
 	bool ProcessRevealClick(const Vei2& screenPos);
 	void ProcessFlagClick(const Vei2& screenPos);
+	const Vei2& GetGridPos(const Vei2& screenPos);
 	Tile& TileAt(const Vei2& gridPos);
+	static const Vei2 GetTopLeft();
 private:
 	static constexpr int width = 20;
 	static constexpr int height = 16;
-	RectI background = { {0,0}, width * SpriteCodex::tileSize, height * SpriteCodex::tileSize };
+	static constexpr int left = (Graphics::ScreenWidth - MineField::width * SpriteCodex::tileSize) / 2;
+	static constexpr int top = (Graphics::ScreenHeight - MineField::height * SpriteCodex::tileSize) / 2;
+	RectI background = { {left, top}, width * SpriteCodex::tileSize, height * SpriteCodex::tileSize };
 	Tile tiles[width * height];
 };
