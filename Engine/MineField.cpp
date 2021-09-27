@@ -17,11 +17,15 @@ void MineField::Tile::Draw(Vei2& gridPos, const bool gameOver, Graphics& gfx)
 	switch (tempState)
 	{
 	case State::hidden:
+		if (gameOver && isBomb) {
+			SpriteCodex::DrawTileBomb(screenPos, gfx);
+			break;
+		}
 		SpriteCodex::DrawTileButton(screenPos, gfx);
 		break;
 	case State::reveald:
 		if (isBomb) {
-			SpriteCodex::DrawTileBomb(screenPos, gfx);
+			SpriteCodex::DrawTileBombRed(screenPos, gfx);
 		}
 		else {
 			SpriteCodex::DrawTileN(nNeighborsBombs, screenPos, gfx);
@@ -108,14 +112,14 @@ MineField::MineField(int nBombs)
 
 	// TEST CODE
 	
-	for (int nRevealed = 0; nRevealed < 100; nRevealed++) {
-		Tile* tile;
-		do {
-			Vei2 gridPos = { xDist(rnd), yDist(rnd) };
-			tile = &TileAt(gridPos);
-		} while (tile->GetState() == Tile::State::reveald);
-		tile->Reveal();
-	}
+	//for (int nRevealed = 0; nRevealed < 100; nRevealed++) {
+	//	Tile* tile;
+	//	do {
+	//		Vei2 gridPos = { xDist(rnd), yDist(rnd) };
+	//		tile = &TileAt(gridPos);
+	//	} while (tile->GetState() == Tile::State::reveald);
+	//	tile->Reveal();
+	//}
 	
 }
 
