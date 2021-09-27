@@ -53,9 +53,25 @@ void MineField::Tile::Draw(Vei2& gridPos, const bool gameOver, Graphics& gfx)
 	}
 }
 
-void MineField::Tile::Reveal()
+void MineField::Tile::Reveal(const Vei2& gridPos, Tile* tiles)
 {
+	if (state == State::reveald)
+		return;
+
 	state = State::reveald;
+	if (nNeighborsBombs == 0) { // Recursivly reveal all empty spots thats next to this empty spot
+		const int xStart = std::max(0, gridPos.x - 1);
+		const int yStart = std::max(0, gridPos.y - 1);
+		const int xEnd = std::min(width - 1, gridPos.x + 1);
+		const int yEnd = std::min(height - 1, gridPos.y + 1);
+		for (Vei2 p = { xStart, yStart }; p.y <= yEnd; p.y++, p.x = xStart) {
+			for (; p.x <= xEnd; p.x++) {
+				if (!tiles[p.y * width + p.x].HasBomb()) {
+					tiles[p.y * width + p.x].Reveal(p, tiles);
+				}
+			}
+		}
+	}
 }
 
 void MineField::Tile::ToggleFlag()
@@ -143,7 +159,7 @@ bool MineField::ProcessRevealClick(const Vei2& screenPos)
 	assert(gridPos.y >= 0 && gridPos.y <= height);
 
 	Tile& clickedTile = TileAt(gridPos);
-	clickedTile.Reveal();
+	clickedTile.Reveal(gridPos, tiles);
 
 	return clickedTile.HasBomb();
 }

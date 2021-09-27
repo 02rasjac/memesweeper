@@ -18,7 +18,7 @@ private:
 		void SpawnBomb();
 		bool HasBomb() const { return isBomb; };
 		void Draw(Vei2& gridPos, const bool gameOver, Graphics& gfx);
-		void Reveal();
+		void Reveal(const Vei2& gridPos, Tile* tiles);
 		void ToggleFlag();
 		const State GetState() const { return state; };
 		void CalculateNeighbors(const Vei2& gridPos, const Tile tiles[]);
